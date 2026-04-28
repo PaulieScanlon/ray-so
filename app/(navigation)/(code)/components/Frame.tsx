@@ -13,6 +13,7 @@ import DefaultFrame from "./frames/DefaultFrame";
 import ElevenLabsFrame from "./frames/ElevenLabsFrame";
 import FirecrawlFrame from "./frames/FirecrawlFrame";
 import GeminiFrame from "./frames/GeminiFrame";
+import MastraFrame from "./frames/MastraFrame";
 import MintlifyFrame from "./frames/MintlifyFrame";
 import NuxtFrame from "./frames/NuxtFrame";
 import OpenAIFrame from "./frames/OpenAIFrame";
@@ -66,6 +67,8 @@ const Frame = ({ resize = true }: { resize?: boolean }) => {
         return <StripeFrame />;
       case THEMES.firecrawl.id:
         return <FirecrawlFrame />;
+      case THEMES.mastra.id:
+        return <MastraFrame />;
       default:
         return <DefaultFrame />;
     }

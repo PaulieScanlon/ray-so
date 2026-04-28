@@ -37,6 +37,8 @@ import NuxtLogo from "../assets/nuxt.svg";
 import NuxtLogoUrl from "../assets/nuxt.svg?url";
 import StripeLogo from "../assets/stripe/logo.svg";
 import StripeLogoUrl from "../assets/stripe/logo.svg?url";
+import MastraLogo from "../assets/mastra.svg";
+import MastraLogoUrl from "../assets/mastra.svg?url";
 import { showLineNumbersAtom } from ".";
 import { createCssVariablesTheme } from "../util/theme-css-variables";
 import { BASE_URL } from "@/utils/common";
@@ -1545,6 +1547,58 @@ export const THEMES: { [index: string]: Theme } = {
         property: "#a7a7a7",
         diffInserted: "#a7a7a7",
         diffDeleted: "#a7a7a7",
+      }),
+    },
+  },
+  mastra: {
+    id: "mastra",
+    name: "Mastra",
+    background: {
+      from: "#0f0f0f",
+      to: "#080808",
+    },
+    icon: MastraLogo,
+    iconUrl: MastraLogoUrl,
+    font: "geist-mono",
+    partner: true,
+    syntax: {
+      light: convertToShikiTheme({
+        foreground: "#666666",
+        constant: "#666666",
+        string: "#158D29",
+        comment: "#a8a8a8",
+        keyword: "#0a0a0a",
+        parameter: "#666666",
+        function: "#158D29",
+        stringExpression: "#158D29",
+        punctuation: "#a8a8a8",
+        link: "#158D29",
+        number: "#666666",
+        property: "#a8a8a8",
+        highlight: "rgba(21, 141, 41, 0.08)",
+        highlightBorder: "#158D29",
+        highlightHover: "rgba(21, 141, 41, 0.04)",
+        diffDeleted: "#a8a8a8",
+        diffInserted: "#158D29",
+      }),
+      dark: convertToShikiTheme({
+        foreground: "#a8a8a8",
+        constant: "#a8a8a8",
+        string: "#7aff78",
+        comment: "#555555",
+        keyword: "#ffffff",
+        parameter: "#a8a8a8",
+        function: "#7aff78",
+        stringExpression: "#7aff78",
+        punctuation: "#555555",
+        link: "#7aff78",
+        number: "#a8a8a8",
+        property: "#555555",
+        highlight: "rgba(122, 255, 120, 0.1)",
+        highlightBorder: "#7aff78",
+        highlightHover: "rgba(122, 255, 120, 0.05)",
+        diffDeleted: "#555555",
+        diffInserted: "#7aff78",
       }),
     },
   },
