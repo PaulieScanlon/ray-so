@@ -55,115 +55,28 @@
 }
 
 .cornerCircleTL,
-.cornerCircleTR,
-.cornerCircleBL,
 .cornerCircleBR {
   position: absolute;
   z-index: 10;
-  width: 48px;
-  height: 48px;
+  width: 38.4px;
+  height: 38.4px;
   pointer-events: none;
 }
 
 .cornerCircleTL circle,
-.cornerCircleTR circle,
-.cornerCircleBL circle,
 .cornerCircleBR circle {
   fill: #080808;
-  stroke: #2a2a2a;
+  stroke: #808080;
 }
 
 .cornerCircleTL {
-  top: -24px;
-  left: -24px;
-}
-
-.cornerCircleTR {
-  top: -24px;
-  right: -24px;
-}
-
-.cornerCircleBL {
-  bottom: -24px;
-  left: -24px;
+  top: -19.2px;
+  left: -19.2px;
 }
 
 .cornerCircleBR {
-  right: -24px;
-  bottom: -24px;
-}
-
-.tile {
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  width: fit-content;
-  min-width: 140px;
-  height: 52px;
-  align-items: center;
-  padding: 8px 22px 0 32px;
-  border: 1px solid #1c1c1c;
-  border-radius: 0 22px 0 0;
-  border-bottom: none;
-  margin-bottom: -1px;
-  background: #0f0f0f;
-  gap: 12px;
-  /* concave bite at bottom-right — antigrid corner mates with window's top-left */
-  -webkit-mask: radial-gradient(circle at calc(100% + 22px) calc(100% + 22px), transparent 22px, #000 22.5px);
-  mask: radial-gradient(circle at calc(100% + 22px) calc(100% + 22px), transparent 22px, #000 22.5px);
-}
-
-.fileIcon {
-  width: 14px;
-  height: auto;
-  flex-shrink: 0;
-  color: #fff;
-}
-
-.fileName {
-  position: relative;
-  display: grid;
-  height: 52px;
-  flex: 0 1 auto;
-  align-items: center;
-  color: #666666;
-  font-size: 14px;
-  letter-spacing: 0.2px;
-  line-height: 52px;
-
-  input,
-  & > span,
-  &:after {
-    position: static;
-    z-index: 2;
-    width: auto;
-    min-width: 1em;
-    border: none;
-    margin: 0;
-    appearance: none;
-    background: none;
-    font: var(--font-inter);
-    font-weight: 300;
-    grid-area: 1 / 2;
-    letter-spacing: 0.2px;
-    resize: none;
-    text-align: left;
-  }
-
-  & > span {
-    position: relative;
-    z-index: 1;
-    color: #666666;
-  }
-
-  input {
-    color: inherit;
-  }
-
-  &:after {
-    content: attr(data-value) " ";
-    visibility: hidden;
-  }
+  right: -19.2px;
+  bottom: -19.2px;
 }
 
 .window {
@@ -171,10 +84,7 @@
   overflow: hidden;
   flex-direction: column;
   align-items: stretch;
-  padding: 12px 18px 18px 18px;
-  border: 1px solid #1c1c1c;
-  border-radius: 0 30px 0 0;
-  background: #0f0f0f;
+  padding: 8px;
 }
 
 .frameLightMode {
@@ -191,32 +101,8 @@
   }
 
   .cornerCircleTL circle,
-  .cornerCircleTR circle,
-  .cornerCircleBL circle,
   .cornerCircleBR circle {
     fill: #f2f2f2;
-    stroke: #d8d8d8;
-  }
-
-  .tile {
-    border-color: #e5e5e5;
-    background: #ffffff;
-  }
-
-  .fileIcon {
-    color: #909090;
-  }
-
-  .fileName {
-    color: #0a0a0a;
-
-    & > span {
-      color: #909090;
-    }
-  }
-
-  .window {
-    border-color: #e5e5e5;
-    background: #ffffff;
+    stroke: #909090;
   }
 }
