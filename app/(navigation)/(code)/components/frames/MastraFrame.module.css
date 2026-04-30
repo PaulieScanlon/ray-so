@@ -1,108 +1,292 @@
 .frame {
   position: relative;
+  display: grid;
   overflow: hidden;
-  background: #080808;
+  padding: 0 !important;
+  background: #000000;
+  grid-template-columns: calc(var(--padding) - var(--gap)) 1fr calc(var(--padding) - var(--gap));
+  grid-template-rows: calc(var(--padding) - var(--gap)) 1fr calc(var(--padding) - var(--gap));
+  --gap: min(20px, max(0px, calc(var(--padding) - 20px)));
+  --window-radius: 27px;
+  --inverted-radius: calc(var(--window-radius) + var(--gap));
+  --fillet-size: calc(var(--inverted-radius) + 2px);
+  --fillet-offset: calc(var(--padding) - var(--gap) - 2px);
 }
 
-.composition {
-  position: relative;
-  z-index: 2;
+.cornerTL,
+.cornerTR,
+.cornerBL,
+.cornerBR,
+.topLeft,
+.topRight,
+.leftTop,
+.leftBottom,
+.rightTop,
+.rightBottom,
+.bottomLeft,
+.bottomRight {
+  background: #0f0f0f;
+  pointer-events: none;
+}
+
+.cornerTL {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.cornerTR {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.cornerBL {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.cornerBR {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.topMiddle {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.bottomMiddle {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.leftMiddle {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  gap: var(--gap);
+  grid-column: 1;
+  grid-row: 2;
 }
 
-.gridlineHTop,
-.gridlineHBottom {
-  position: absolute;
-  z-index: 3;
-  left: -200px;
-  width: calc(100% + 400px);
-  height: 1px;
-  background-image: linear-gradient(to right, #2a2a2a 6px, transparent 6px);
-  background-repeat: repeat-x;
-  background-size: 12px 1px;
-  pointer-events: none;
+.rightMiddle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  grid-column: 3;
+  grid-row: 2;
 }
 
-.gridlineHTop {
-  top: 0;
+.topLeft {
+  width: 60%;
+  border-right: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  border-bottom-right-radius: var(--window-radius);
 }
 
-.gridlineHBottom {
-  bottom: 0;
+.topRight {
+  width: 40%;
+  border-bottom: 2px solid #171717;
+  border-left: 2px solid #171717;
+  border-bottom-left-radius: var(--window-radius);
 }
 
-.gridlineVLeft,
-.gridlineVRight {
-  position: absolute;
-  z-index: 3;
-  top: -200px;
-  width: 1px;
-  height: calc(100% + 400px);
-  background-image: linear-gradient(to bottom, #2a2a2a 6px, transparent 6px);
-  background-repeat: repeat-y;
-  background-size: 1px 12px;
-  pointer-events: none;
+.leftTop {
+  height: 35%;
+  border-right: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  border-bottom-right-radius: var(--window-radius);
 }
 
-.gridlineVLeft {
-  left: 0;
+.leftBottom {
+  height: 65%;
+  border-top: 2px solid #171717;
+  border-right: 2px solid #171717;
+  border-top-right-radius: var(--window-radius);
 }
 
-.gridlineVRight {
-  right: 0;
+.rightTop {
+  height: 65%;
+  border-bottom: 2px solid #171717;
+  border-left: 2px solid #171717;
+  border-bottom-left-radius: var(--window-radius);
 }
 
-.cornerCircleTL,
-.cornerCircleBR {
-  position: absolute;
-  z-index: 10;
-  width: 38.4px;
-  height: 38.4px;
-  pointer-events: none;
+.rightBottom {
+  height: 35%;
+  border-top: 2px solid #171717;
+  border-left: 2px solid #171717;
+  border-top-left-radius: var(--window-radius);
 }
 
-.cornerCircleTL circle,
-.cornerCircleBR circle {
-  fill: #080808;
-  stroke: #808080;
+.bottomLeft {
+  width: 30%;
+  border-top: 2px solid #171717;
+  border-right: 2px solid #171717;
+  border-top-right-radius: var(--window-radius);
 }
 
-.cornerCircleTL {
-  top: -19.2px;
-  left: -19.2px;
-}
-
-.cornerCircleBR {
-  right: -19.2px;
-  bottom: -19.2px;
+.bottomRight {
+  width: 70%;
+  border-top: 2px solid #171717;
+  border-left: 2px solid #171717;
+  border-top-left-radius: var(--window-radius);
 }
 
 .window {
+  position: relative;
+  z-index: 1;
   display: flex;
-  overflow: hidden;
   flex-direction: column;
-  align-items: stretch;
-  padding: 8px;
+  border: 2px solid #242424;
+  border-radius: var(--window-radius);
+  margin: var(--gap);
+  background: #171717;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.cornerFilletTL,
+.cornerFilletTR,
+.cornerFilletBL,
+.cornerFilletBR {
+  position: absolute;
+  z-index: 2;
+  width: var(--fillet-size);
+  height: var(--fillet-size);
+  pointer-events: none;
+}
+
+.cornerFilletTL {
+  top: var(--fillet-offset);
+  left: var(--fillet-offset);
+  background: radial-gradient(
+    circle at 100% 100%,
+    transparent var(--inverted-radius),
+    #171717 var(--inverted-radius),
+    #171717 var(--fillet-size),
+    #0f0f0f var(--fillet-size)
+  );
+}
+
+.cornerFilletTR {
+  top: var(--fillet-offset);
+  right: var(--fillet-offset);
+  background: radial-gradient(
+    circle at 0% 100%,
+    transparent var(--inverted-radius),
+    #171717 var(--inverted-radius),
+    #171717 var(--fillet-size),
+    #0f0f0f var(--fillet-size)
+  );
+}
+
+.cornerFilletBL {
+  bottom: var(--fillet-offset);
+  left: var(--fillet-offset);
+  background: radial-gradient(
+    circle at 100% 0%,
+    transparent var(--inverted-radius),
+    #171717 var(--inverted-radius),
+    #171717 var(--fillet-size),
+    #0f0f0f var(--fillet-size)
+  );
+}
+
+.cornerFilletBR {
+  right: var(--fillet-offset);
+  bottom: var(--fillet-offset);
+  background: radial-gradient(
+    circle at 0% 0%,
+    transparent var(--inverted-radius),
+    #171717 var(--inverted-radius),
+    #171717 var(--fillet-size),
+    #0f0f0f var(--fillet-size)
+  );
+}
+
+.minimal {
+  .cornerTL,
+  .cornerTR,
+  .cornerBL,
+  .cornerBR,
+  .topMiddle,
+  .bottomMiddle,
+  .leftMiddle,
+  .rightMiddle,
+  .cornerFilletTL,
+  .cornerFilletTR,
+  .cornerFilletBL,
+  .cornerFilletBR {
+    display: none;
+  }
 }
 
 .frameLightMode {
-  background: #f2f2f2;
+  background: #9f9f9f;
 
-  .gridlineHTop,
-  .gridlineHBottom {
-    background-image: linear-gradient(to right, #d8d8d8 6px, transparent 6px);
+  .window {
+    border-color: #c5c5c5;
+    background: #ffffff;
   }
 
-  .gridlineVLeft,
-  .gridlineVRight {
-    background-image: linear-gradient(to bottom, #d8d8d8 6px, transparent 6px);
+  .cornerTL,
+  .cornerTR,
+  .cornerBL,
+  .cornerBR,
+  .topLeft,
+  .topRight,
+  .leftTop,
+  .leftBottom,
+  .rightTop,
+  .rightBottom,
+  .bottomLeft,
+  .bottomRight {
+    border-color: #f0f0f0;
+    background: #e8e8e8;
   }
 
-  .cornerCircleTL circle,
-  .cornerCircleBR circle {
-    fill: #f2f2f2;
-    stroke: #909090;
+  .cornerFilletTL {
+    background: radial-gradient(
+      circle at 100% 100%,
+      transparent var(--inverted-radius),
+      #f0f0f0 var(--inverted-radius),
+      #f0f0f0 var(--fillet-size),
+      #e8e8e8 var(--fillet-size)
+    );
+  }
+
+  .cornerFilletTR {
+    background: radial-gradient(
+      circle at 0% 100%,
+      transparent var(--inverted-radius),
+      #f0f0f0 var(--inverted-radius),
+      #f0f0f0 var(--fillet-size),
+      #e8e8e8 var(--fillet-size)
+    );
+  }
+
+  .cornerFilletBL {
+    background: radial-gradient(
+      circle at 100% 0%,
+      transparent var(--inverted-radius),
+      #f0f0f0 var(--inverted-radius),
+      #f0f0f0 var(--fillet-size),
+      #e8e8e8 var(--fillet-size)
+    );
+  }
+
+  .cornerFilletBR {
+    background: radial-gradient(
+      circle at 0% 0%,
+      transparent var(--inverted-radius),
+      #f0f0f0 var(--inverted-radius),
+      #f0f0f0 var(--fillet-size),
+      #e8e8e8 var(--fillet-size)
+    );
   }
 }
