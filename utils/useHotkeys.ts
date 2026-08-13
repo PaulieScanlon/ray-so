@@ -12,6 +12,11 @@ hotkeys.filter = (event: KeyboardEvent) => {
     return true;
   }
 
+  // allow word highlighting, which acts on the textarea's own selection
+  if (event.keyCode === 87 && event.shiftKey && event.altKey) {
+    return true;
+  }
+
   // ignore: isContentEditable === 'true', <input> and <textarea> when readOnly state is false, <select>
   if (
     target.isContentEditable ||

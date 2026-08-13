@@ -3,9 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Language, LANGUAGES } from "../util/languages";
 
 import styles from "./Editor.module.css";
-import { highlightedLinesAtom, highlighterAtom, loadingLanguageAtom } from "../store";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  addedLinesAtom,
+  focusedLinesAtom,
+  highlightedLinesAtom,
+  highlightedWordsAtom,
+  highlighterAtom,
+  loadingLanguageAtom,
+  removedLinesAtom,
+} from "../store";
+import { useAtomValue, useSetAtom } from "jotai";
 import { themeDarkModeAtom, themeAtom } from "../store/themes";
+import { highlightWords } from "../util/highlight-words";
 
 type PropTypes = {
   selectedLanguage: Language | null;
@@ -17,6 +26,10 @@ const HighlightedCode: React.FC<PropTypes> = ({ selectedLanguage, code }) => {
   const highlighter = useAtomValue(highlighterAtom);
   const setIsLoadingLanguage = useSetAtom(loadingLanguageAtom);
   const highlightedLines = useAtomValue(highlightedLinesAtom);
+  const addedLines = useAtomValue(addedLinesAtom);
+  const removedLines = useAtomValue(removedLinesAtom);
+  const focusedLines = useAtomValue(focusedLinesAtom);
+  const highlightedWords = useAtomValue(highlightedWordsAtom);
   const darkMode = useAtomValue(themeDarkModeAtom);
   const theme = useAtomValue(themeAtom);
   const themeName = theme.id === "tailwind" ? (darkMode ? "tailwind-dark" : "tailwind-light") : "css-variables";
@@ -49,6 +62,12 @@ const HighlightedCode: React.FC<PropTypes> = ({ selectedLanguage, code }) => {
             line(node, line) {
               node.properties["data-line"] = line;
               if (highlightedLines.includes(line)) this.addClassToHast(node, "highlighted-line");
+              if (addedLines.includes(line)) this.addClassToHast(node, "diff-added-line");
+              if (removedLines.includes(line)) this.addClassToHast(node, "diff-removed-line");
+              if (focusedLines.length > 0) {
+                this.addClassToHast(node, focusedLines.includes(line) ? "focused-line" : "unfocused-line");
+              }
+              highlightWords(node, highlightedWords);
             },
           },
         ],
@@ -58,7 +77,19 @@ const HighlightedCode: React.FC<PropTypes> = ({ selectedLanguage, code }) => {
     generateHighlightedHtml().then((newHtml) => {
       setHighlightedHtml(newHtml);
     });
-  }, [code, selectedLanguage, highlighter, setIsLoadingLanguage, setHighlightedHtml, highlightedLines, themeName]);
+  }, [
+    code,
+    selectedLanguage,
+    highlighter,
+    setIsLoadingLanguage,
+    setHighlightedHtml,
+    highlightedLines,
+    addedLines,
+    removedLines,
+    focusedLines,
+    highlightedWords,
+    themeName,
+  ]);
 
   return (
     <div

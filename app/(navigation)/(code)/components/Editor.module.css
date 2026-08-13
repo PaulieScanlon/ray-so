@@ -48,6 +48,59 @@
       content: "";
     }
   }
+
+  :global(.diff-added-line) {
+    position: relative;
+    background-color: color-mix(in srgb, var(--ray-token-diff-inserted, #3ecf8e) 14%, transparent) !important;
+
+    &:before {
+      color: var(--ray-token-diff-inserted, #3ecf8e);
+      content: "+";
+      opacity: 1;
+    }
+
+    &:after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -1px;
+      width: 2px;
+      background-color: var(--ray-token-diff-inserted, #3ecf8e);
+      content: "";
+    }
+  }
+
+  :global(.diff-removed-line) {
+    position: relative;
+    background-color: color-mix(in srgb, var(--ray-token-diff-deleted, #f06a50) 14%, transparent) !important;
+
+    &:before {
+      color: var(--ray-token-diff-deleted, #f06a50);
+      content: "-";
+      opacity: 1;
+    }
+
+    &:after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -1px;
+      width: 2px;
+      background-color: var(--ray-token-diff-deleted, #f06a50);
+      content: "";
+    }
+  }
+
+  :global(.unfocused-line) {
+    filter: blur(0.6px);
+    opacity: 0.35;
+  }
+
+  :global(.highlighted-word) {
+    border-radius: 3px;
+    background-color: var(--ray-highlight, rgba(255, 255, 255, 0.12));
+    box-shadow: 0 0 0 1px var(--ray-highlight-border, rgba(255, 255, 255, 0.24));
+  }
 }
 
 .isHighlightingLines {
@@ -95,6 +148,11 @@
     &:before {
       opacity: 1;
     }
+  }
+
+  :global(.diff-added-line):before,
+  :global(.diff-removed-line):before {
+    content: attr(data-line);
   }
 
   &.showLineNumbersLarge {

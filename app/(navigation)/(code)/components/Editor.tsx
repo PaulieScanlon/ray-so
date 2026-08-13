@@ -3,6 +3,7 @@ import React, {
   KeyboardEventHandler,
   useRef,
   ChangeEventHandler,
+  ClipboardEventHandler,
   FocusEventHandler,
   useState,
   useEffect,
@@ -22,8 +23,29 @@ import useHotkeys from "../../../../utils/useHotkeys";
 import HighlightedCode from "./HighlightedCode";
 import classNames from "classnames";
 import { derivedFlashMessageAtom } from "../store/flash";
-import { highlightedLinesAtom, showLineNumbersAtom } from "../store";
+import {
+  addedLinesAtom,
+  focusedLinesAtom,
+  highlightedLinesAtom,
+  highlightedWordsAtom,
+  removedLinesAtom,
+  showLineNumbersAtom,
+} from "../store";
 import { LANGUAGES } from "../util/languages";
+import { hasAnnotations, parseAnnotations } from "../util/parse-annotations";
+
+const without = <T,>(values: T[], value: T) => {
+  return values.filter((entry) => {
+    return entry !== value;
+  });
+};
+
+const toggle = <T,>(values: T[], value: T) => {
+  if (values.includes(value)) {
+    return without(values, value);
+  }
+  return [...values, value];
+};
 
 function indentText(text: string) {
   return text
@@ -140,7 +162,11 @@ function Editor() {
   const [theme, setTheme] = useAtom(themeAtom);
   const [unlockedThemes, setUnlockedThemes] = useAtom(unlockedThemesAtom);
   const setFlashMessage = useSetAtom(derivedFlashMessageAtom);
-  const setHighlightedLines = useSetAtom(highlightedLinesAtom);
+  const [highlightedLines, setHighlightedLines] = useAtom(highlightedLinesAtom);
+  const [addedLines, setAddedLines] = useAtom(addedLinesAtom);
+  const [removedLines, setRemovedLines] = useAtom(removedLinesAtom);
+  const [focusedLines, setFocusedLines] = useAtom(focusedLinesAtom);
+  const [highlightedWords, setHighlightedWords] = useAtom(highlightedWordsAtom);
   const [isHighlightingLines, setIsHighlightingLines] = useState(false);
   const [showLineNumbers] = useAtom(themeLineNumbersAtom);
   const numberOfLines = (code.match(/\n/g) || []).length;
@@ -148,6 +174,20 @@ function Editor() {
   useHotkeys("f", (event) => {
     event.preventDefault();
     textareaRef.current?.focus();
+  });
+
+  useHotkeys("alt+shift+w", (event) => {
+    event.preventDefault();
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      return;
+    }
+    const selection = textarea.value.slice(textarea.selectionStart, textarea.selectionEnd).trim();
+    if (!selection) {
+      setHighlightedWords([]);
+      return;
+    }
+    setHighlightedWords(toggle(highlightedWords, selection));
   });
 
   const handleKeyDown = useCallback<KeyboardEventHandler<HTMLTextAreaElement>>((event) => {
@@ -196,6 +236,27 @@ function Editor() {
     [setCode, setTheme, setFlashMessage, setUnlockedThemes, unlockedThemes, theme.id],
   );
 
+  const handlePaste = useCallback<ClipboardEventHandler<HTMLTextAreaElement>>(
+    (event) => {
+      const pasted = event.clipboardData.getData("text");
+      if (!hasAnnotations(pasted)) {
+        return;
+      }
+      event.preventDefault();
+      const textarea = event.currentTarget;
+      const merged =
+        textarea.value.slice(0, textarea.selectionStart) + pasted + textarea.value.slice(textarea.selectionEnd);
+      const parsed = parseAnnotations(merged);
+      setCode(parsed.code);
+      setHighlightedLines(parsed.highlightedLines);
+      setAddedLines(parsed.addedLines);
+      setRemovedLines(parsed.removedLines);
+      setFocusedLines(parsed.focusedLines);
+      setHighlightedWords(parsed.highlightedWords);
+    },
+    [setCode, setHighlightedLines, setAddedLines, setRemovedLines, setFocusedLines, setHighlightedWords],
+  );
+
   const handleFocus = useCallback<FocusEventHandler>(() => {
     if (isCodeExample && textareaRef.current) {
       // Safari needs a timeout otherwise the selection flickers
@@ -207,19 +268,40 @@ function Editor() {
   }, [isCodeExample]);
 
   useEffect(() => {
+    const cycleDiff = (line: number) => {
+      if (addedLines.includes(line)) {
+        setAddedLines(without(addedLines, line));
+        setRemovedLines([...removedLines, line]);
+        return;
+      }
+      if (removedLines.includes(line)) {
+        setRemovedLines(without(removedLines, line));
+        return;
+      }
+      setAddedLines([...addedLines, line]);
+    };
+
     const listener = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const lineNumber = (target.closest("[data-line]") as HTMLElement)?.dataset?.line;
-      if (lineNumber && isHighlightingLines) {
-        setHighlightedLines((prev) => {
-          const line = Number(lineNumber);
-          if (prev.includes(line)) {
-            return prev.filter((l) => l !== line);
-          } else {
-            return [...prev, line];
-          }
-        });
+      const lineElement = target.closest("[data-line]") as HTMLElement | null;
+      if (!lineElement) {
+        return;
       }
+      const line = Number(lineElement.dataset.line);
+
+      if (!isHighlightingLines) {
+        return;
+      }
+
+      if (event.shiftKey) {
+        cycleDiff(line);
+        return;
+      }
+      if (event.metaKey || event.ctrlKey) {
+        setFocusedLines(toggle(focusedLines, line));
+        return;
+      }
+      setHighlightedLines(toggle(highlightedLines, line));
     };
 
     document.addEventListener("click", listener);
@@ -227,7 +309,17 @@ function Editor() {
     return () => {
       document.removeEventListener("click", listener);
     };
-  }, [setHighlightedLines, isHighlightingLines]);
+  }, [
+    isHighlightingLines,
+    highlightedLines,
+    setHighlightedLines,
+    addedLines,
+    setAddedLines,
+    removedLines,
+    setRemovedLines,
+    focusedLines,
+    setFocusedLines,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -278,6 +370,7 @@ function Editor() {
         value={code}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
         onFocus={handleFocus}
         data-enable-grammarly="false"
       />

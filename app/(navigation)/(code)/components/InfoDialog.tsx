@@ -71,6 +71,9 @@ export function InfoDialog() {
               <Shortcut keys={["P"]}>Change padding</Shortcut>
               <Shortcut keys={["L"]}>Select language</Shortcut>
               <Shortcut keys={["⌥", "click"]}>Highlight line</Shortcut>
+              <Shortcut keys={["⌥", "⇧", "click"]}>Mark line added / removed</Shortcut>
+              <Shortcut keys={["⌥", "⌘", "click"]}>Focus line</Shortcut>
+              <Shortcut keys={["⌥", "⇧", "W"]}>Highlight selected word</Shortcut>
               <Shortcut keys={["⌥", "shift", "F"]}>Format code</Shortcut>
               <Shortcut keys={["⌘", "K"]}>Toggle Export Menu</Shortcut>
               <Shortcut keys={["⌘", "S"]}>Save PNG</Shortcut>

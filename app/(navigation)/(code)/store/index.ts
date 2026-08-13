@@ -21,11 +21,30 @@ export const highlighterAtom = atom<Highlighter | null>(null);
 
 export const loadingLanguageAtom = atom<boolean>(false);
 
-export const highlightedLinesAtom = atomWithHash<number[]>("highlightedLines", [], {
+const lineListAtom = (key: string) => {
+  return atomWithHash<number[]>(key, [], {
+    serialize(val) {
+      return val.join(",");
+    },
+    deserialize(str) {
+      return str ? str.split(",").map(Number) : [];
+    },
+  });
+};
+
+export const highlightedLinesAtom = lineListAtom("highlightedLines");
+
+export const addedLinesAtom = lineListAtom("addedLines");
+
+export const removedLinesAtom = lineListAtom("removedLines");
+
+export const focusedLinesAtom = lineListAtom("focusedLines");
+
+export const highlightedWordsAtom = atomWithHash<string[]>("highlightedWords", [], {
   serialize(val) {
-    return val.join(",");
+    return val.map(encodeURIComponent).join(",");
   },
   deserialize(str) {
-    return str ? str.split(",").map(Number) : [];
+    return str ? str.split(",").map(decodeURIComponent) : [];
   },
 });
