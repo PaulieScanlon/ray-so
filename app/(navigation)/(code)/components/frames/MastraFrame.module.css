@@ -3,7 +3,7 @@
   display: grid;
   overflow: hidden;
   padding: 0 !important;
-  background: #000000;
+  background: #131313;
   grid-template-columns: calc(var(--padding) - var(--gap)) 1fr calc(var(--padding) - var(--gap));
   grid-template-rows: calc(var(--padding) - var(--gap)) 1fr calc(var(--padding) - var(--gap));
   --gap: min(20px, max(0px, calc(var(--padding) - 20px)));
@@ -25,7 +25,8 @@
 .rightBottom,
 .bottomLeft,
 .bottomRight {
-  background: #0f0f0f;
+  background: #181818;
+  box-shadow: 0 9px 8px rgba(0, 0, 0, 0.25);
   pointer-events: none;
 }
 
@@ -83,57 +84,57 @@
 
 .topLeft {
   width: 60%;
-  border-right: 2px solid #171717;
-  border-bottom: 2px solid #171717;
+  border-right: 2px solid #212121;
+  border-bottom: 2px solid #212121;
   border-bottom-right-radius: var(--window-radius);
 }
 
 .topRight {
   width: 40%;
-  border-bottom: 2px solid #171717;
-  border-left: 2px solid #171717;
+  border-bottom: 2px solid #212121;
+  border-left: 2px solid #212121;
   border-bottom-left-radius: var(--window-radius);
 }
 
 .leftTop {
   height: 35%;
-  border-right: 2px solid #171717;
-  border-bottom: 2px solid #171717;
+  border-right: 2px solid #212121;
+  border-bottom: 2px solid #212121;
   border-bottom-right-radius: var(--window-radius);
 }
 
 .leftBottom {
   height: 65%;
-  border-top: 2px solid #171717;
-  border-right: 2px solid #171717;
+  border-top: 2px solid #212121;
+  border-right: 2px solid #212121;
   border-top-right-radius: var(--window-radius);
 }
 
 .rightTop {
   height: 65%;
-  border-bottom: 2px solid #171717;
-  border-left: 2px solid #171717;
+  border-bottom: 2px solid #212121;
+  border-left: 2px solid #212121;
   border-bottom-left-radius: var(--window-radius);
 }
 
 .rightBottom {
   height: 35%;
-  border-top: 2px solid #171717;
-  border-left: 2px solid #171717;
+  border-top: 2px solid #212121;
+  border-left: 2px solid #212121;
   border-top-left-radius: var(--window-radius);
 }
 
 .bottomLeft {
   width: 30%;
-  border-top: 2px solid #171717;
-  border-right: 2px solid #171717;
+  border-top: 2px solid #212121;
+  border-right: 2px solid #212121;
   border-top-right-radius: var(--window-radius);
 }
 
 .bottomRight {
   width: 70%;
-  border-top: 2px solid #171717;
-  border-left: 2px solid #171717;
+  border-top: 2px solid #212121;
+  border-left: 2px solid #212121;
   border-top-left-radius: var(--window-radius);
 }
 
@@ -142,10 +143,13 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  border: 2px solid #242424;
+  border: 1px solid transparent;
   border-radius: var(--window-radius);
   margin: var(--gap);
-  background: #171717;
+  background:
+    linear-gradient(#1f1f1f, #1f1f1f) padding-box,
+    linear-gradient(180deg, #4d4d4d, #303030) border-box;
+  box-shadow: 0 9px 8px rgba(0, 0, 0, 0.25);
   grid-column: 2;
   grid-row: 2;
 }
@@ -167,9 +171,9 @@
   background: radial-gradient(
     circle at 100% 100%,
     transparent var(--inverted-radius),
-    #171717 var(--inverted-radius),
-    #171717 var(--fillet-size),
-    #0f0f0f var(--fillet-size)
+    #212121 var(--inverted-radius),
+    #212121 var(--fillet-size),
+    #181818 var(--fillet-size)
   );
 }
 
@@ -179,9 +183,9 @@
   background: radial-gradient(
     circle at 0% 100%,
     transparent var(--inverted-radius),
-    #171717 var(--inverted-radius),
-    #171717 var(--fillet-size),
-    #0f0f0f var(--fillet-size)
+    #212121 var(--inverted-radius),
+    #212121 var(--fillet-size),
+    #181818 var(--fillet-size)
   );
 }
 
@@ -191,9 +195,9 @@
   background: radial-gradient(
     circle at 100% 0%,
     transparent var(--inverted-radius),
-    #171717 var(--inverted-radius),
-    #171717 var(--fillet-size),
-    #0f0f0f var(--fillet-size)
+    #212121 var(--inverted-radius),
+    #212121 var(--fillet-size),
+    #181818 var(--fillet-size)
   );
 }
 
@@ -203,9 +207,9 @@
   background: radial-gradient(
     circle at 0% 0%,
     transparent var(--inverted-radius),
-    #171717 var(--inverted-radius),
-    #171717 var(--fillet-size),
-    #0f0f0f var(--fillet-size)
+    #212121 var(--inverted-radius),
+    #212121 var(--fillet-size),
+    #181818 var(--fillet-size)
   );
 }
 
